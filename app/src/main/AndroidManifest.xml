@@ -29,6 +29,7 @@
         <activity android:name=".FindPasswordActivity"/>
         <activity android:name=".JoinActivity"/>
         <activity android:name=".CameraActivity"/>
+        <activity android:name=".ClientInfomationActivity"/>
     </application>
 
 </manifest>
