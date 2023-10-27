@@ -137,7 +137,8 @@
             android:background="@android:color/transparent"
             android:padding="7sp"
             android:scaleType="centerCrop"
-            android:src="@drawable/lent_icon" />
+            android:src="@drawable/lent_icon"
+            android:onClick="rent"/>
 
         <View
             android:layout_width="0dp"

@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView profile_icon;
     private TextView hello_text;
     private TextView name_text;
+    private ImageButton imageButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,5 +31,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imageButton = findViewById(R.id.loadmap_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),CameraActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
+
 }
