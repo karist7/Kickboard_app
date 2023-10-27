@@ -1,6 +1,7 @@
 package com.example.scooter2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        ImageButton moveButton = findViewById(R.id.login_button);
-        moveButton.setOnClickListener(new View.OnClickListener(){
+        ImageButton login_button = findViewById(R.id.login_button);
+        login_button.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
@@ -31,6 +32,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        final View drawView = (View) findViewById(R.id.drawer);
+
+
+        // 드로어 화면을 열고 닫을 버튼 객체 참조
+        ImageButton btnOpenDrawer = (ImageButton) findViewById(R.id.menu_button);
+        // 드로어 여는 버튼 리스너
+        btnOpenDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(drawView);
+            }
+        });
+
+
         imageButton = findViewById(R.id.loadmap_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,12 +55,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        Button moveButton1 = findViewById(R.id.profile_button);
-        moveButton1.setOnClickListener(new View.OnClickListener() {
+        Button profile_button = findViewById(R.id.profile_button);
+        profile_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ClientInfomationActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button use_time_button = findViewById(R.id.use_time_button);
+        use_time_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UseHistoryActivity.class);
                 startActivity(intent);
             }
         });

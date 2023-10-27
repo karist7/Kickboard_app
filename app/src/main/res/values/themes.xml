@@ -1,9 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Scooter2" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Scooter2" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-
-    <style name="Theme.Scooter2" parent="Base.Theme.Scooter2" />
+    <style name="Theme.Scooter2" parent="Base.Theme.Scooter2">
+        <item name="android:statusBarColor">@color/black</item> <!-- 상태바 색상-->
+    </style>
 </resources>

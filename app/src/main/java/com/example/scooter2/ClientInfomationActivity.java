@@ -17,5 +17,14 @@ public class ClientInfomationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_infomation);
+
+        Button use_time_button = findViewById(R.id.use_time_button);
+        use_time_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), UseHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
