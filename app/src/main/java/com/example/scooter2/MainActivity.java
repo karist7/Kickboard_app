@@ -39,7 +39,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button moveButton1 = findViewById(R.id.profile_button);
+        moveButton1.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ClientInfomationActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
