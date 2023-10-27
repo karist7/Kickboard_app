@@ -25,7 +25,7 @@
         android:layout_gravity="left"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="60dp"
-        android:background="@drawable/solid_green_button"
+        android:background="@drawable/solid_gray_button"
         android:textStyle="bold"
         android:hint="아이디 입력"
         android:textColorHint="#000000"
@@ -39,7 +39,7 @@
         android:layout_gravity="left"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/solid_green_button"
+        android:background="@drawable/solid_gray_button"
         android:textStyle="bold"
         android:inputType="textPassword"
         android:hint="비밀번호 입력"
@@ -57,6 +57,7 @@
         android:textStyle="bold"
         android:text="로그인"
         android:textColor="#ffffff"/>
+
     <android.widget.LinearLayout
         android:layout_width="match_parent"
         android:layout_height="22dp"

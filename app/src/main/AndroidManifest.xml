@@ -30,6 +30,7 @@
         <activity android:name=".JoinActivity"/>
         <activity android:name=".CameraActivity"/>
         <activity android:name=".ClientInfomationActivity"/>
+        <activity android:name=".UseHistoryActivity"/>
     </application>
 
 </manifest>
