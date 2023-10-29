@@ -11,19 +11,31 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView profile_icon;
     private TextView hello_text;
     private TextView name_text;
     private ImageButton imageButton;
+    public static String name="";
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        intent=getIntent();
 
         ImageButton login_button = findViewById(R.id.login_button);
+
+
+        name_text = findViewById(R.id.client_name);
+        if (intent != null && intent.hasExtra("name")){
+            name = intent.getStringExtra("name");
+            name_text.setText(name+"님");
+            Log.d("nameTest",name);
+
+        }
         login_button.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -51,8 +63,13 @@ public class MainActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),CameraActivity.class);
-                startActivity(intent);
+                if(name=="")
+                    Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                else{
+                    Intent intent=new Intent(getApplicationContext(),CameraActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         Button profile_button = findViewById(R.id.profile_button);
