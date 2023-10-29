@@ -1,199 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.widget.RelativeLayout
+<androidx.drawerlayout.widget.DrawerLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToOutline="true"
-    android:background="#FFFFFF">
-
-    <android.widget.TextView
-        android:id="@+id/logo_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="36dp"
-        android:text="SAFE\nSCOOTER"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/menu_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="38dp"
-        android:layout_marginRight="40dp"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/menu_icon" />
-
-    <ImageButton
-        android:id="@+id/login_button"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="42dp"
-        android:layout_marginRight="90dp"
-        android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/login_icon" />
-
-    <android.widget.Button
-        android:id="@+id/pay_use_time_button"
-        android:layout_width="wrap_content"
-        android:layout_height="63dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="119dp"
-        android:layout_marginRight="40dp"
-        android:background="@drawable/solid_green_button"
-        android:paddingHorizontal="30dp"
-        android:text="요금 및 이용시간 보러가기"
-        android:textSize="12dp"
-        android:textColor="#000000"
-        android:gravity="left|center"/>
-
-
-    <ImageView
-        android:id="@+id/profile"
-        android:layout_width="82dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="77dp"
-        android:layout_marginTop="226dp"
-        android:layout_marginRight="251dp"
-        android:elevation="4dp"
-        android:src="@drawable/profile_icon" />
-
-    <TextView
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="181dp"
-        android:layout_marginTop="231dp"
-        android:layout_marginRight="160dp"
-        android:elevation="4dp"
-        android:text="안녕하세요"
-        android:textColor="@color/black"
-        android:textSize="12dp" />
-
-    <TextView
-        android:id="@+id/client_name"
-        android:layout_width="129dp"
-        android:layout_height="25dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="181dp"
-        android:layout_marginTop="259dp"
-        android:layout_marginRight="100dp"
-        android:elevation="4dp"
-        android:text="ex) @string/client"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <android.widget.Button
-        android:id="@+id/profile_button"
-        android:layout_width="328dp"
-        android:layout_height="112dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="203dp"
-        android:layout_marginRight="40dp"
-        android:paddingHorizontal="50dp"
-        android:textColor="#000000"
-        android:elevation="2dp"
-        android:background="@drawable/solid_green_button" />
-
-    <android.widget.LinearLayout
-        android:layout_width="371dp"
-        android:layout_height="160dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginTop="346dp"
-        android:orientation="horizontal">
-
-        <android.widget.ImageButton
-            android:id="@+id/loadmap_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:background="@android:color/transparent"
-            android:padding="7sp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/lent_icon"
-            android:onClick="rent"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <android.widget.ImageButton
-            android:id="@+id/Danger_place_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:background="@android:color/transparent"
-            android:padding="7sp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/report_icon" />
-    </android.widget.LinearLayout>
-
-
-    <android.widget.LinearLayout
+    tools:context=".MainActivity">
+    <android.widget.RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginHorizontal="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="516dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:clipToOutline="true"
+        android:background="#FFFFFF">
 
         <android.widget.TextView
-            android:layout_width="0dp"
+            android:id="@+id/logo_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:text="대여하기"
-            android:textAlignment="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="36dp"
+            android:text="SAFE\nSCOOTER"
             android:textColor="#000000"
-            android:textSize="15sp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+        <ImageButton
+            android:id="@+id/menu_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="38dp"
+            android:layout_marginRight="40dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/menu_icon" />
 
-        <android.widget.TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="5"
-            android:text="위험지역 신고하기"
-            android:textAlignment="center"
+        <ImageButton
+            android:id="@+id/login_button"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="42dp"
+            android:layout_marginRight="90dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/login_icon" />
+
+        <android.widget.Button
+            android:id="@+id/use_time_button"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="119dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/solid_gray_button"
+            android:paddingHorizontal="30dp"
+            android:text="이용시간 보러가기"
+            android:textSize="14dp"
             android:textColor="#000000"
-            android:textSize="15sp"
+            android:textStyle="bold"
+            android:gravity="left|center"/>
+
+
+        <ImageView
+            android:id="@+id/profile"
+            android:layout_width="82dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="77dp"
+            android:layout_marginTop="226dp"
+            android:layout_marginRight="251dp"
+            android:elevation="4dp"
+            android:src="@drawable/profile_icon" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="181dp"
+            android:layout_marginTop="231dp"
+            android:layout_marginRight="100dp"
+            android:elevation="4dp"
+            android:text="안녕하세요"
+            android:textColor="@color/black"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/client_name"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="181dp"
+            android:layout_marginTop="259dp"
+            android:layout_marginRight="60dp"
+            android:elevation="4dp"
+            android:text="로그인이 필요합니다."
+            android:textColor="@color/black"
+            android:textSize="15dp"
             android:textStyle="bold" />
-    </android.widget.LinearLayout>
+
+        <android.widget.Button
+            android:id="@+id/profile_button"
+            android:layout_width="328dp"
+            android:layout_height="112dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="205dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/solid_gray_button"
+            android:elevation="2dp"
+            android:paddingHorizontal="50dp"
+            android:textColor="#000000" />
+
+        <android.widget.LinearLayout
+            android:layout_width="371dp"
+            android:layout_height="160dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="346dp"
+            android:orientation="horizontal">
+
+            <android.widget.ImageButton
+                android:id="@+id/loadmap_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="@android:color/transparent"
+                android:padding="7sp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/lent_icon"
+                android:onClick="rent"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <android.widget.ImageButton
+                android:id="@+id/Danger_place_button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="@android:color/transparent"
+                android:padding="7sp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/report_icon" />
+        </android.widget.LinearLayout>
 
 
-</android.widget.RelativeLayout>
+        <android.widget.LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="516dp"
+            android:orientation="horizontal">
+
+            <android.widget.TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="5"
+                android:text="대여하기"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <android.widget.TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="5"
+                android:text="위험지역 신고하기"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </android.widget.LinearLayout>
+    </android.widget.RelativeLayout>
+
+    <!--드로어 화면이 될 Layout-->
+    <LinearLayout
+        android:id="@+id/drawer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:layout_gravity="right"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="MENU"
+            android:textColor="@color/black"
+            android:textSize="35dp"
+            android:paddingBottom="20dp"
+            android:background="@drawable/solid_bottom_value_2"
+            android:layout_marginHorizontal="40dp"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="left"
+            android:text="공지사항"
+            android:textSize="25dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"/>
+
+
+    </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

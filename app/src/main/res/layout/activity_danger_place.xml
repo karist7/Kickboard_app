@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="헬멧을 먼저 인증해주세요"
+        android:text="위험지역"
         android:textAlignment="center"
         android:textSize="20dp"
         android:paddingTop="25dp"
@@ -19,13 +19,26 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:background="@drawable/solid_bottom_value_2"/>
-
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/danger_icon"/>
 
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="위험한 위치 정보 입니다."
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="25dp"
+        android:gravity="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="400dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,11 +51,11 @@
         tools:layout_editor_absoluteX="16dp">
 
         <android.widget.Button
-            android:id="@+id/btnCapture"
-            android:layout_width="150dp"
+            android:id="@+id/danger_check_button"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:background="@drawable/solid_black_button"
-            android:text="인증"
+            android:text="예. 알겠습니다."
             android:textSize="20dp"
             android:textColor="#ffffff"/>
     </LinearLayout>

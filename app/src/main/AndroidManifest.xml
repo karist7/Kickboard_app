@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Scooter2"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -29,6 +31,13 @@
         <activity android:name=".FindPasswordActivity"/>
         <activity android:name=".JoinActivity"/>
         <activity android:name=".CameraActivity"/>
+        <activity android:name=".ClientInfomationActivity"/>
+        <activity android:name=".UseHistoryActivity"/>
+        <activity android:name=".ScanQR"/>
+        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation"/>
+
     </application>
 
 </manifest>
