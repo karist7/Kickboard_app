@@ -1,7 +1,9 @@
 package com.example.scooter2;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +16,11 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import com.example.scooter2.server.RetrofitManager;
+
+import java.io.ByteArrayOutputStream;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -111,8 +116,17 @@ public class CameraActivity extends AppCompatActivity {
                 camera.takePicture(null, null, null, new Camera.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {
+                        Bitmap capturedBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        Bitmap rotatedBitmap = rotateBitmap(capturedBitmap, -90); // 90도 회전
+                        Bitmap finalBitmap = flipImage(rotatedBitmap); // 좌우 반전
+                        Bitmap resizedBitmap = resizeBitmap(finalBitmap, 800, 1200); // 크기 조정
 
-                        sendPhoto(data);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        sendPhoto(stream.toByteArray());
+                        Intent intent = new Intent(getApplicationContext(), ScanQR.class);
+                        startActivity(intent);
+
 
 
 
@@ -137,5 +151,18 @@ public class CameraActivity extends AppCompatActivity {
                 Log.d("전송오류",t.toString());
             }
         });
+    }
+    public Bitmap rotateBitmap(Bitmap source, int angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+    private Bitmap flipImage(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1.0f, 1.0f);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+    public Bitmap resizeBitmap(Bitmap source, int newWidth, int newHeight) {
+        return Bitmap.createScaledBitmap(source, newWidth, newHeight, true);
     }
 }
