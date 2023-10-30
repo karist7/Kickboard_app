@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
                 startActivity(intent);
             }
+
         });
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         final View drawView = (View) findViewById(R.id.drawer);
@@ -57,18 +58,25 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(drawView);
             }
         });
-
+        ImageButton dangerPlaceButton = findViewById(R.id.Danger_place_button);
+        dangerPlaceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),MapActivity.class);
+                startActivity(intent);
+            }
+        });
 
         imageButton = findViewById(R.id.loadmap_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name=="")
-                    Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
-                else{
+//                if(name=="")
+//                    Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+//                else{
                     Intent intent=new Intent(getApplicationContext(),CameraActivity.class);
                     startActivity(intent);
-                }
+//                }
 
             }
         });
@@ -85,10 +93,16 @@ public class MainActivity extends AppCompatActivity {
         use_time_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), UseHistoryActivity.class);
-                startActivity(intent);
+                if(name=="")
+                       Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                else{
+                    Intent intent = new Intent(getApplicationContext(), UseHistoryActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
+
     }
 
 }

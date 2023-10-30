@@ -15,16 +15,21 @@ import retrofit2.http.Part;
 
 public interface ApiService {
     @Multipart
-    @POST("/test/")
+    @POST("/checkHelmet/")
     Call<ResponseBody> requestPhoto(
             @Part  MultipartBody.Part photo);
 
-    @POST("/signup1/")
+    @POST("/signup")
     Call<ResponseBody> regist(
             @Body RequestBody requestBody
             );
-    @POST("/signin1/")
+    @POST("/signin/")
     Call<ResponseBody> login(
+            @Body RequestBody requestBody
+    );
+
+    @POST("/start/")
+    Call<ResponseBody> startUp(
             @Body RequestBody requestBody
     );
 }

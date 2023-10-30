@@ -34,9 +34,20 @@
         <activity android:name=".ClientInfomationActivity"/>
         <activity android:name=".UseHistoryActivity"/>
         <activity android:name=".ScanQR"/>
+        <activity android:name=".MapActivity"/>
+        <activity android:name=".DriveActivity"/>
+        <activity android:name=".DriveMapActivity"/>
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDxZy03pE2BnIZh9v_avgCTPJJzrqToH-Y" />
+
+
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="" />
 
     </application>
 
