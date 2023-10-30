@@ -18,6 +18,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.widget.Toast;
+
 import com.example.scooter2.server.RetrofitManager;
 
 import java.io.ByteArrayOutputStream;
@@ -137,12 +139,18 @@ public class CameraActivity extends AppCompatActivity {
     }
     public void sendPhoto(final byte[] comment){
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), comment);
-        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("imageFile", "image.jpg", requestFile);
         retrofitManager.getApiService().requestPhoto(imagePart).enqueue(new Callback<ResponseBody>(){
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.code()==201){
+                    Toast.makeText(CameraActivity.this, "인증에 성공했습니다.", Toast.LENGTH_SHORT).show();
                     Log.d("성공","성공");
+//                    Intent intent = new Intent(getApplicationContext(), ScanQR.class);
+//                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(CameraActivity.this, "인증에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
 

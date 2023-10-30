@@ -26,6 +26,7 @@ public class RetrofitManager {
             .build();
     Retrofit.Builder builder = new Retrofit.Builder()
             .baseUrl("http://220.69.208.119:8000")
+            //.baseUrl("https://3541-220-69-208-115.ngrok-free.app")
             .addConverterFactory(GsonConverterFactory.create())
             .client(createTrustingOkHttpClient());
 
