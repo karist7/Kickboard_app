@@ -32,4 +32,8 @@ public interface ApiService {
     Call<ResponseBody> startUp(
             @Body RequestBody requestBody
     );
+    @POST("/start/")
+    Call<JSONObject> startUpTest(
+            @Body RequestBody requestBody
+    );
 }
