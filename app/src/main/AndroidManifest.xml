@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -34,12 +38,14 @@
         <activity android:name=".ClientInfomationActivity"/>
         <activity android:name=".UseHistoryActivity"/>
         <activity android:name=".ScanQR"/>
-        <activity android:name=".MapActivity"/>
+        <activity android:name=".MapActivity"
+            android:exported="true" />
         <activity android:name=".DriveActivity"/>
         <activity android:name=".DriveMapActivity"/>
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDxZy03pE2BnIZh9v_avgCTPJJzrqToH-Y" />

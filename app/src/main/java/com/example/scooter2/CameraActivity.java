@@ -39,6 +39,7 @@ public class CameraActivity extends AppCompatActivity {
     private Camera camera;
     private SurfaceView surfaceView;
     private SurfaceHolder surfaceHolder;
+    private boolean pictureTaken = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,14 +122,11 @@ public class CameraActivity extends AppCompatActivity {
                         Bitmap capturedBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                         Bitmap rotatedBitmap = rotateBitmap(capturedBitmap, -90); // 90도 회전
                         Bitmap finalBitmap = flipImage(rotatedBitmap); // 좌우 반전
-                        Bitmap resizedBitmap = resizeBitmap(finalBitmap, 800, 1200); // 크기 조정
+                        Bitmap resizedBitmap = resizeBitmap(finalBitmap, 416, 416); // 크기 조정
 
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         sendPhoto(stream.toByteArray());
-                        Intent intent = new Intent(getApplicationContext(), ScanQR.class);
-                        startActivity(intent);
-
 
 
 
@@ -146,11 +144,19 @@ public class CameraActivity extends AppCompatActivity {
                 if(response.code()==201){
                     Toast.makeText(CameraActivity.this, "인증에 성공했습니다.", Toast.LENGTH_SHORT).show();
                     Log.d("성공","성공");
-//                    Intent intent = new Intent(getApplicationContext(), ScanQR.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(getApplicationContext(), ScanQR.class);
+                    intent.putExtra("finish","finish");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+
                 }
                 else{
                     Toast.makeText(CameraActivity.this, "인증에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    pictureTaken = true;
+
+                    // 다시 사진을 찍을 수 있도록 미리보기 재시작
+                    camera.startPreview();
                 }
             }
 

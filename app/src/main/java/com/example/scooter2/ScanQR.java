@@ -26,10 +26,11 @@ import retrofit2.Response;
 public class ScanQR extends AppCompatActivity {
     RetrofitManager retrofitManager = new RetrofitManager();
     String start="";
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        intent=getIntent();
 
         new IntentIntegrator(this).initiateScan();
     }
@@ -44,14 +45,19 @@ public class ScanQR extends AppCompatActivity {
             } else {
                 start = result.getContents();
                 Log.d("ScanQRTEST",start);
+
                 startProcess(start);
+
                 finish();
+
 
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
     private void startProcess(final String start){
         JSONObject jsonObject = new JSONObject();
         try {
@@ -66,12 +72,26 @@ public class ScanQR extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.code()==201){
+
                     try {
                         Log.d("rsponseData",response.body().string());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                     Toast.makeText(ScanQR.this, "운행을 시작합니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), DriveMapActivity.class);
+                    startActivity(intent);
+                }
+                if(response.code()==202){
+                    try {
+                        Log.d("rsponseData",response.body().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Toast.makeText(ScanQR.this, "운행을 종료합니다.", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
 
             }

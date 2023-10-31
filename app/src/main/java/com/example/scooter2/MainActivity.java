@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d("nameTest",name);
 
         }
+        if(name!=""){
+            name_text.setText(name+"님");
+        }
         login_button.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -71,12 +74,12 @@ public class MainActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(name=="")
-//                    Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
-//                else{
+                if(name=="")
+                    Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                else{
                     Intent intent=new Intent(getApplicationContext(),CameraActivity.class);
                     startActivity(intent);
-//                }
+                }
 
             }
         });
