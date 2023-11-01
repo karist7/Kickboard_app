@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -115,7 +116,14 @@ public class CameraActivity extends AppCompatActivity {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Take a picture when the capture button is clicked
+                captureButton.setEnabled(false); // 버튼 비활성화
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        captureButton.setEnabled(true); // 1초 후에 버튼 활성화
+                    }
+                }, 1500); // 1000 밀리초 = 1초
                 camera.takePicture(null, null, null, new Camera.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] data, Camera camera) {

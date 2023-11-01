@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView name_text;
     private ImageButton imageButton;
     public static String name="";
+    public static String phone="";
     Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         name_text = findViewById(R.id.client_name);
         if (intent != null && intent.hasExtra("name")){
             name = intent.getStringExtra("name");
+            phone = intent.getStringExtra("phone");
             name_text.setText(name+"님");
             Log.d("nameTest",name);
 
@@ -88,8 +90,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ClientInfomationActivity.class);
-                startActivity(intent);
+                if(name=="")
+                    Toast.makeText(MainActivity.this, "로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent(getApplicationContext(), ClientInfomationActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         Button use_time_button = findViewById(R.id.use_time_button);
