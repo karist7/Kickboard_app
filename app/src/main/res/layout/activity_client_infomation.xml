@@ -49,20 +49,21 @@
                     android:src="@drawable/profile_icon" />
 
                 <TextView
-                    android:layout_width="85dp"
+                    android:layout_width="129dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="170dp"
                     android:layout_marginTop="35dp"
-                    android:layout_marginRight="150dp"
+                    android:layout_marginRight="112dp"
                     android:text="안녕하세요"
                     android:textColor="@color/black"
                     android:textSize="17dp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/info_name"
                     android:layout_width="wrap_content"
                     android:layout_height="47dp"
                     android:layout_alignParentLeft="true"
@@ -90,6 +91,7 @@
                 android:paddingBottom="15dp"/>
 
             <TextView
+                android:id="@+id/location_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="현재위치정보"
@@ -209,11 +211,11 @@
                     android:textSize="15dp"
                     android:layout_gravity="left"
                     android:paddingBottom="15dp"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/phone_num"
                     android:layout_width="wrap_content"
