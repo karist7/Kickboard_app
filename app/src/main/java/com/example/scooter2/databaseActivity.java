@@ -12,7 +12,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import java.text.SimpleDateFormat;
-
+/*
 class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "abnormalState.db";
     private static final int DATABASE_VERSION = 2;
@@ -71,4 +71,4 @@ public class databaseActivity extends AppCompatActivity {
     }
 
 }
-
+*/
