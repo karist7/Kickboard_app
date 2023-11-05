@@ -2,14 +2,14 @@ package com.example.scooter2;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.scooter2.server.Markers;
+import com.example.scooter2.server.RetrofitManager;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -30,17 +31,27 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-
+    TextView text;
+    RetrofitManager retrofitManager = new RetrofitManager();
     private double latitude, longitude;
     FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mMap;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 10;
+    ArrayList<Double> latitudeArrayList=new ArrayList<>();
+    ArrayList<Double> longitudeArrayList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +67,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (permissionCheck == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }
+        loadMarker();
+        text = findViewById(R.id.map_text);
     }
 
     @Override
@@ -79,7 +92,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void buildLocationRequest() {
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000); // 1초마다 위치 업데이트를 요청
+        locationRequest.setInterval(500); // 1초마다 위치 업데이트를 요청
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -90,8 +103,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     super.onLocationResult(locationResult);
                     Location location = locationResult.getLastLocation();
                     if (location != null) {
+                        double lat = Math.round(location.getLatitude() * 10000.0) / 10000.0;
+                        double log = Math.round(location.getLongitude() * 10000.0) / 10000.0;
+                        boolean flag=false;
+                        for(int i=0;i<latitudeArrayList.size();i++) {
+                            double checkLat = latitudeArrayList.get(i);
+                            double checkLog = longitudeArrayList.get(i);
+
+                            if (lat >= checkLat - 0.0001 && lat <= checkLat + 0.0001 && log >= checkLog - 0.0001 && log <= checkLog + 0.0001) {
+                                flag = true;
+                            }
+                        }
+                        if(flag){
+                            text.setText("사고 다발 구역입니다.");
+                            text.setTextColor(Color.parseColor("#FF0000"));
+                        }
+                        else{
+                            text.setText("안전 구역입니다.");
+                            text.setTextColor(Color.parseColor("#90EE90"));
+                        }
+
+
+
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
                     }
                 }
             }, null);
@@ -107,7 +142,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Location location = locationResult.getLastLocation();
                     if (location != null) {
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
                     }
                 }
             }, null);
@@ -148,5 +184,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.i("TAG", "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
+    }
+    public void loadMarker(){
+        retrofitManager.getApiService().accident().enqueue(new Callback<List<Markers>>() {
+            @Override
+            public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
+                if(response.isSuccessful()){
+                    List<Markers> markerList = response.body();
+                    for(Markers markers :markerList){
+
+                        double lat = Math.round(Double.parseDouble(markers.getLatitude()) * 10000.0) / 10000.0;
+                        double log = Math.round(Double.parseDouble(markers.getLongitude()) * 10000.0) / 10000.0;
+                        latitudeArrayList.add(lat);
+                        longitudeArrayList.add(log);
+                        Log.d("Array", lat + " " + log);
+                        LatLng location = new LatLng(lat,log);
+                        mMap.addMarker(new MarkerOptions().position(location));
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Markers>> call, Throwable t) {
+                Log.d("loadMarkerError",t.toString());
+            }
+        });
     }
 }

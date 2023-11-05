@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="5"
-                android:text="위험지역 신고하기"
+                android:text="위험지역 확인하기"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="15sp"
