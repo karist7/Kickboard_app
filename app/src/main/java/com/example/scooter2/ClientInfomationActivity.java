@@ -41,7 +41,7 @@ public class ClientInfomationActivity extends AppCompatActivity {
             latitude = loc_Current.getLatitude();
 
         }
-        String address = LocationHelper.getAddressFromLocation(getApplicationContext(), latitude, longitude);
+        String address = LocationHelper.getDetailedAddressFromLocation(getApplicationContext(), latitude, longitude);
         TextView locationText = findViewById(R.id.location_name);
         locationText.setText(address);
         use_time_button.setOnClickListener(new View.OnClickListener() {

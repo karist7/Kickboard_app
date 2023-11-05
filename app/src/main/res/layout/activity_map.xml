@@ -13,6 +13,16 @@
         android:layout_height="match_parent"
         tools:context=".MapActivity" />
 
+    <TextView
+        android:id="@+id/map_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/black"
+        android:text="안전한 구역입니다."
+        android:textAlignment="center"
+        android:textColor="	#90EE90"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

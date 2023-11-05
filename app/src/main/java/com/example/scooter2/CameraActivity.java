@@ -130,7 +130,7 @@ public class CameraActivity extends AppCompatActivity {
                         Bitmap capturedBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                         Bitmap rotatedBitmap = rotateBitmap(capturedBitmap, -90); // 90도 회전
                         Bitmap finalBitmap = flipImage(rotatedBitmap); // 좌우 반전
-                        Bitmap resizedBitmap = resizeBitmap(finalBitmap, 416, 416); // 크기 조정
+                        Bitmap resizedBitmap = resizeBitmap(finalBitmap, 800, 1200); // 크기 조정
 
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);

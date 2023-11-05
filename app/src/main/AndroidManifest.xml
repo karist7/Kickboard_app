@@ -40,7 +40,6 @@
         <activity android:name=".ScanQR"/>
         <activity android:name=".MapActivity"
             android:exported="true" />
-        <activity android:name=".DriveActivity"/>
         <activity android:name=".DriveMapActivity"/>
         <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
