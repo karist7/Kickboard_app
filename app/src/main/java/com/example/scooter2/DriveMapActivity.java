@@ -16,6 +16,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -115,11 +117,17 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
     private double currentRoll, currentPitch;
     public void onAccuracyChanged(Sensor sensor, int accuracy){}
     public void onSensorChanged(SensorEvent event){}
+    int mDdok;
+    SoundPool mPool;
+    AudioManager mAm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drivemap);
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        mPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        mDdok = mPool.load(this, R.raw.ddok, 1);
+        mAm = (AudioManager) getSystemService(AUDIO_SERVICE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.drive_map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -137,6 +145,7 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),CameraActivity.class);
                 startActivity(intent);
+                mPool.resume(mDdok);
                 finish();
 
             }
@@ -203,10 +212,12 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
                             }
                         }
                         if(flag){
+                            mPool.play(mDdok, 1, 1, 0, 0, 1);
                             text.setText("사고 다발 구역입니다.");
                             text.setTextColor(Color.parseColor("#FF0000"));
                         }
                         else{
+                            mPool.resume(mDdok);
                             text.setText("안전 구역입니다.");
                             text.setTextColor(Color.parseColor("#90EE90"));
                         }
@@ -264,7 +275,14 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
     }
-
+    @Override
+    protected void onPause() {
+        if (mPool != null) {
+            mPool.autoPause(); // 모든 소리 중지
+            mPool.release(); // SoundPool 리소스 해제
+        }
+        super.onPause();
+    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -315,14 +333,6 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
         if (mGyroscopeSensor != null) {
             mSensorManager.registerListener(userSensorListner, mGyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
-    }
-    @Override
-    protected void onPause() {
-        // 앱이 백그라운드로 이동할 때 수행할 작업
-        // 여기에 일시정지 관련 코드 작성
-        super.onPause();
-
-        mSensorManager.unregisterListener(userSensorListner);
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.example.scooter2;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,12 +55,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 10;
     ArrayList<Double> latitudeArrayList=new ArrayList<>();
     ArrayList<Double> longitudeArrayList=new ArrayList<>();
-
+    int mDdok;
+    SoundPool mPool;
+    AudioManager mAm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
+        mPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        mDdok = mPool.load(this, R.raw.ddok, 1);
+        mAm = (AudioManager) getSystemService(AUDIO_SERVICE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -92,7 +99,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void buildLocationRequest() {
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(500); // 1초마다 위치 업데이트를 요청
+        locationRequest.setInterval(1000); // 1초마다 위치 업데이트를 요청
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -109,13 +116,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         for(int i=0;i<latitudeArrayList.size();i++) {
                             double checkLat = latitudeArrayList.get(i);
                             double checkLog = longitudeArrayList.get(i);
-                            Log.d("checkLocation",lat+" "+log+"     "+checkLat+" "+checkLog);
+
                             if (lat >= checkLat - 0.0002 && lat <= checkLat + 0.0002 && log >= checkLog - 0.0002 && log <= checkLog + 0.0002) {
                                 flag = true;
                                 break;
                             }
                         }
                         if(flag){
+                            mPool.play(mDdok, 1, 1, 0, 0, 1);
                             text.setText("사고 다발 구역입니다.");
                             text.setTextColor(Color.parseColor("#FF0000"));
                         }
@@ -133,7 +141,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }, null);
         }
     }
-
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        // 원하는 동작 수행
+        // 예시: 뒤로가기 버튼 동작 막기
+        if (mPool != null) {
+            mPool.autoPause(); // 모든 소리 중지
+            mPool.release(); // SoundPool 리소스 해제
+        }
+        super.onBackPressed(); // 이 부분을 주석 처리하거나 삭제하여 뒤로가기 버튼을 막을 수 있습니다.
+    }
+    @Override
+    protected void onPause() {
+        if (mPool != null) {
+            mPool.autoPause(); // 모든 소리 중지
+            mPool.release(); // SoundPool 리소스 해제
+        }
+        super.onPause();
+    }
     private void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(new LocationRequest(), new LocationCallback() {
