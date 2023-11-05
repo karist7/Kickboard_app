@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         dangerPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),MapActivity.class);
+                Intent intent=new Intent(getApplicationContext(),DriveMapActivity.class);
                 startActivity(intent);
             }
         });

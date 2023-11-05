@@ -109,9 +109,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         for(int i=0;i<latitudeArrayList.size();i++) {
                             double checkLat = latitudeArrayList.get(i);
                             double checkLog = longitudeArrayList.get(i);
-
-                            if (lat >= checkLat - 0.0001 && lat <= checkLat + 0.0001 && log >= checkLog - 0.0001 && log <= checkLog + 0.0001) {
+                            Log.d("checkLocation",lat+" "+log+"     "+checkLat+" "+checkLog);
+                            if (lat >= checkLat - 0.0002 && lat <= checkLat + 0.0002 && log >= checkLog - 0.0002 && log <= checkLog + 0.0002) {
                                 flag = true;
+                                break;
                             }
                         }
                         if(flag){

@@ -39,4 +39,9 @@ public interface ApiService {
 
     @POST("/sendaccident/")
     Call<List<Markers>> accident();
+
+    @POST("/saveraccident/")
+    Call<ResponseBody> accidentSave(
+        @Body RequestBody requestBody
+    );
 }

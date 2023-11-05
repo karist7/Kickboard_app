@@ -15,6 +15,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,10 +49,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,8 +76,7 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
     RetrofitManager retrofitManager = new RetrofitManager();
     ArrayList<Double> latitudeArrayList=new ArrayList<>();
     ArrayList<Double> longitudeArrayList=new ArrayList<>();
-    ArrayList<Double> latitudeList;
-    ArrayList<Double> longitudeList;
+
 
     FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mMap;
@@ -81,6 +92,7 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
     private static final int MESSAGE_TIMER_COMPLETE = 101;
     private static final int MESSAGE_TIMER_STOP = 102;
     private boolean flag = false;
+    double longitude, latitude;
 
     //senser
     private SensorManager mSensorManager = null;
@@ -107,8 +119,7 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drivemap);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.drive_map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -142,6 +153,7 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -163,7 +175,7 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
 
     private void buildLocationRequest() {
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(1000); // 1초마다 위치 업데이트를 요청
+        locationRequest.setInterval(500); // 1초마다 위치 업데이트를 요청
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -173,10 +185,33 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
                 public void onLocationResult(@NonNull LocationResult locationResult) {
                     super.onLocationResult(locationResult);
                     Location location = locationResult.getLastLocation();
+
                     if (location != null) {
+                        double lat = Math.round(location.getLatitude() * 10000.0) / 10000.0;
+                        double log = Math.round(location.getLongitude() * 10000.0) / 10000.0;
+
+                        boolean flag=false;
+                        for(int i=0;i<latitudeArrayList.size();i++) {
+                            double checkLat = latitudeArrayList.get(i);
+                            double checkLog = longitudeArrayList.get(i);
+                            //Log.d("checkLocation",lat+" "+log+"     "+checkLat+" "+checkLog);
+                            if (lat >= checkLat - 0.0002 && lat <= checkLat + 0.0002 && log >= checkLog - 0.0002 && log <= checkLog + 0.0002) {
+                                flag = true;
+
+                                break;
+
+                            }
+                        }
+                        if(flag){
+                            text.setText("사고 다발 구역입니다.");
+                            text.setTextColor(Color.parseColor("#FF0000"));
+                        }
+                        else{
+                            text.setText("안전 구역입니다.");
+                            text.setTextColor(Color.parseColor("#90EE90"));
+                        }
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
                     }
                 }
             }, null);
@@ -191,27 +226,6 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
                     super.onLocationResult(locationResult);
                     Location location = locationResult.getLastLocation();
                     if (location != null) {
-                        double lat = Math.round(location.getLatitude() * 10000.0) / 10000.0;
-                        double log = Math.round(location.getLongitude() * 10000.0) / 10000.0;
-
-                        for(int i=0;i<latitudeArrayList.size();i++) {
-                            double checkLat = latitudeArrayList.get(i);
-                            double checkLog = longitudeArrayList.get(i);
-
-
-                            if(lat>=checkLat-0.0001 && lat<=checkLat+0.0001 && log>=checkLog-0.0001 && log<=checkLog+0.0001){
-
-
-                                text.setText("사고 다발 구역입니다.");
-                                text.setTextColor(Color.parseColor("#FF0000"));
-                            }
-                            else{
-                                text.setText("안전 구역입니다.");
-                                text.setTextColor(Color.parseColor("#90EE90"));
-                            }
-                        }
-
-
 
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
@@ -269,18 +283,19 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onResponse(Call<List<Markers>> call, Response<List<Markers>> response) {
                 if(response.isSuccessful()){
-                    latitudeList=new ArrayList<>();
-                    longitudeList = new ArrayList<>();
+                    latitudeArrayList=new ArrayList<>();
+                    longitudeArrayList = new ArrayList<>();
                     List<Markers> markerList = response.body();
                     for(Markers markers :markerList){
                         double lat = Double.parseDouble(markers.getLatitude());
                         double log = Double.parseDouble(markers.getLongitude());
-                        latitudeList.add(lat);
-                        longitudeList.add(log);
+                        latitudeArrayList.add(lat);
+                        longitudeArrayList.add(log);
                         LatLng location = new LatLng(lat,log);
                         mMap.addMarker(new MarkerOptions().position(location));
 
                     }
+                    Log.d("onLocationResult", (latitudeArrayList.size())+"");
                 }
             }
 
@@ -292,23 +307,41 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
+        if (mAccelerometer != null) {
+            mSensorManager.registerListener(userSensorListner, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+        if (mGyroscopeSensor != null) {
+            mSensorManager.registerListener(userSensorListner, mGyroscopeSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
     @Override
-    protected void onStop(){
-        super.onStop();
+    protected void onPause() {
+        // 앱이 백그라운드로 이동할 때 수행할 작업
+        // 여기에 일시정지 관련 코드 작성
+        super.onPause();
+
+        mSensorManager.unregisterListener(userSensorListner);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 앱이 다시 포그라운드로 돌아왔을 때 수행할 작업
+        // 여기에 다시 시작하는 관련 코드 작성
     }
 
 
-    private void complementaty(double new_ts){
 
+    private void complementaty(double new_ts) {
         /* 자이로랑 가속 해제 */
         gyroRunning = false;
         accRunning = false;
 
         /*센서 값 첫 출력시 dt(=timestamp - event.timestamp)에 오차가 생기므로 처음엔 break */
-        if(timestamp == 0){
+        if (timestamp == 0) {
             timestamp = new_ts;
             return;
         }
@@ -317,106 +350,165 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
 
         /* degree measure for accelerometer */
         mAccPitch = -Math.atan2(mAccValues[0], mAccValues[2]) * 180.0 / Math.PI; // Y 축 기준
-        mAccRoll= Math.atan2(mAccValues[1], mAccValues[2]) * 180.0 / Math.PI; // X 축 기준
+        mAccRoll = Math.atan2(mAccValues[1], mAccValues[2]) * 180.0 / Math.PI; // X 축 기준
 
         /**
          * 1st complementary filter.
          *  mGyroValuess : 각속도 성분.
          *  mAccPitch : 가속도계를 통해 얻어낸 회전각.
          */
-        temp = (1/a) * (mAccPitch - pitch) + mGyroValues[1];
-        pitch = pitch + (temp*dt);
+        temp = (1 / a) * (mAccPitch - pitch) + mGyroValues[1];
+        pitch = pitch + (temp * dt);
 
-        temp = (1/a) * (mAccRoll - roll) + mGyroValues[0];
-        roll = roll + (temp*dt);
+        temp = (1 / a) * (mAccRoll - roll) + mGyroValues[0];
+        roll = roll + (temp * dt);
 
-        text.setText("roll : "+String.format("%.2f", roll)+"\t\t\tpitch : "+String.format("%.2f", pitch));
-
-        /*
-        if(( 70 < roll && roll < 180 && -180 < pitch && pitch < -80 ) ||
-        ( -20 < roll && roll < 0 && 60 < pitch && pitch < 90 ) ||
-        ( -180 < roll && roll < -70 && 70 < pitch && pitch < 180 ) ||
-        ( 140 < Math.abs(roll) && 140 < Math.abs(pitch) ) ||
-        ( -90 < roll && roll < -50 && 0 < pitch && pitch < -20 ) ||
-        ( -20 < roll && roll < 10 && -90 < pitch && pitch < -50 ) )
-         */
-
-        if( (70 < Math.abs(roll) && Math.abs(roll) < 180 && 70 < Math.abs(pitch) && Math.abs(pitch) < 180) ||
+        // 비정상 반응
+        if ((70 < Math.abs(roll) && Math.abs(roll) < 180 && 70 < Math.abs(pitch) && Math.abs(pitch) < 180) ||
                 (0 < Math.abs(roll) && Math.abs(roll) < 20 && 50 < Math.abs(pitch) && Math.abs(pitch) < 90) ||
-                ( -90 < roll && roll < -50 && 0 < pitch && pitch < -20 )){
+                (-90 < roll && roll < -50 && 0 < pitch && pitch < -20)) {
 
-            if(flag == false){
+            // 5초 대기 타이머 가동
+            if (flag == false) {
                 flag = true;
                 timerHandler.removeMessages(MESSAGE_TIMER_STOP);
                 timerHandler.sendEmptyMessage(MESSAGE_TIMER_START);
             }
         }
-        else{
 
-            if(flag == true){
+        // 정상 반응
+        else {
+            if (flag == true) {
                 flag = false;
                 timerHandler.removeMessages(MESSAGE_TIMER_COMPLETE);
                 timerHandler.removeMessages(MESSAGE_TIMER_START);
                 timerHandler.sendEmptyMessage(MESSAGE_TIMER_STOP);
             }
         }
+
     }
-    public class UserSensorListner implements SensorEventListener{
+
+    // 센서 값을 불러와 필터 적용
+    public class UserSensorListner implements SensorEventListener {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            switch (event.sensor.getType()){
+            switch (event.sensor.getType()) {
 
                 /** GYROSCOPE */
                 case Sensor.TYPE_GYROSCOPE:
-
                     /*센서 값을 mGyroValues에 저장*/
                     mGyroValues = event.values;
-
-                    if(!gyroRunning)
+                    if (!gyroRunning)
                         gyroRunning = true;
                     break;
 
+
                 /** ACCELEROMETER */
                 case Sensor.TYPE_ACCELEROMETER:
-
                     /*센서 값을 mAccValues에 저장*/
                     mAccValues = event.values;
-
-                    if(!accRunning)
+                    if (!accRunning)
                         accRunning = true;
                     break;
 
             }
 
             /**두 센서 새로운 값을 받으면 상보필터 적용*/
-            if(gyroRunning && accRunning){
+            if (gyroRunning && accRunning) {
                 complementaty(event.timestamp);
             }
         }
 
         @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
     }
 
+
+    // 타이머 실행
     public class TimerHandler extends Handler {
         @Override
-        public void handleMessage(Message msg){
-            switch (msg.what){
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                // 대기 (5초)
                 case MESSAGE_TIMER_START:
-                    Log.d("JiroTest","신고대기");
-                    this.sendEmptyMessageDelayed(MESSAGE_TIMER_COMPLETE, 5000);
+                    this.sendEmptyMessageDelayed(MESSAGE_TIMER_COMPLETE, 4000);
                     break;
+
+                // 비정상 상태가 5초가 지나 사고 상태로 인지
                 case MESSAGE_TIMER_COMPLETE:
-                    Log.d("JiroTest","신고");
+
+                    // 사고 위치 서버에 전송
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        String[] permission = new String[2];
+                        permission[0] = Manifest.permission.ACCESS_COARSE_LOCATION;
+                        permission[1] = Manifest.permission.ACCESS_FINE_LOCATION;
+                        requestPermissions(permission, 1);
+                        return;
+                    }
+                    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                    Location loc_Current = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                    // 위도
+                    double latitude = loc_Current.getLatitude();
+                    // 경도
+                    double longitude = loc_Current.getLongitude();
+
+                    //변환
+                    double lat = Math.round(latitude * 10000.0) / 10000.0;
+                    double log = Math.round(longitude * 10000.0) / 10000.0;
+
+                    String latString = lat+"";
+                    String logString = log+"";
+
+
+
+                    //**************************************************************************************
+                    //전송
+                    accident(latString,logString);
+
+
+                    //**************************************************************************************
                     this.removeMessages(MESSAGE_TIMER_COMPLETE);
                     break;
+
+                // 안전한 상태
                 case MESSAGE_TIMER_STOP:
-                    Log.d("JiroTest","안전");
                     break;
             }
         }
     }
+    private void accident(final String latitude, final String longitude){
+        JSONObject jsonObject = new JSONObject();
+        try {
 
+            jsonObject.put("latitude", latitude);
+            jsonObject.put("longitude", longitude);
+
+
+            // ... 다른 필드들
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
+        retrofitManager.getApiService().accidentSave(requestBody).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    Log.d("sensorSuccess","센서 성공");
+                    Toast.makeText(DriveMapActivity.this, "사고가 발생하였습니다. 서버로 전송합니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("sensorError", t.toString());
+            }
+        });
+    }
 }
 
