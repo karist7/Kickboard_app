@@ -145,7 +145,8 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),CameraActivity.class);
                 startActivity(intent);
-                mPool.resume(mDdok);
+                mPool.release(); // SoundPool 리소스 해제
+                mPool.autoPause(); // 모든 소리 중지
                 finish();
 
             }
@@ -519,6 +520,11 @@ public class DriveMapActivity extends AppCompatActivity implements OnMapReadyCal
                 Log.d("sensorError", t.toString());
             }
         });
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSensorManager.unregisterListener(userSensorListner);
     }
 }
 
