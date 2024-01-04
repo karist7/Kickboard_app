@@ -17,3 +17,7 @@
  <br>Object-Detection: Yolov5 / Python 
  
 </blockquote>
+<p data-ke-size="size16" style="text-align: left;"> <br>App 서버 페이지(서버측 기능X):</p>
+<blockquote data-ke-style="style2"> <a href="https://github.com/SCH-OOPSLA-LAB/Kickboard_server" target="_blank"><span>https://github.com/SCH-OOPSLA-LAB/Kickboard_server</span></a> 
+</blockquote>
+<p data-ke-size="size16" style="text-align: left;"> </p></div>
