@@ -41,6 +41,7 @@ public class ScanQR extends AppCompatActivity {
         if(result != null) {
             if(result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                finish();
 
             } else {
                 start = result.getContents();
